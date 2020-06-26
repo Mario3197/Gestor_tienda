@@ -1,0 +1,11 @@
+repository\Conexion.class
+PedidoController.class
+model\Pedido.class
+model\Producto.class
+repository\PedidosRepository.class
+repository\UsuarioRepository.class
+model\ProductoPedido.class
+model\Usuario.class
+LoginController.class
+repository\ProductoRepository.class
+ClienteController.class
