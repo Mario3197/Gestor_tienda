@@ -22,7 +22,7 @@
                                     </h1>
                                 </div>
                             </div>
-                         <form action="ServletControlador?accion=put&idCliente=${cliente.id}" method="POST" class="was-validated">
+                         <form action="pedido?accion=crear" method="POST" class="was-validated">
                             <div class="row justify-content-end" style="margin-top: 2%">
                                 <div class="col-4">
                                     Cantidad
@@ -41,7 +41,7 @@
                                             <div class="input-group mb-3">
                                                 <input type="number" class="form-control" id="${producto.nombre}Cantidad"
                                                        onkeyup="multiplicaCantidad('${producto.nombre}', ${producto.precioPKilo})"
-                                                       name="${producto.nombre}Cantidad" autocomplete="off" step="0.01" required/>
+                                                       name="${producto.nombre}Cantidad" autocomplete="off" required/>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon1">Kg</span>
                                                 </div>
