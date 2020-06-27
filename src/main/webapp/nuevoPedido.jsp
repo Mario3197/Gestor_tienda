@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Nuevo pedido</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -70,32 +71,58 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon3">$</span>
                                         </div>
-                                        <input type="number" class="form-control" id="total" name="${producto.nombre}Total"  disabled required/>
+                                        <input type="number" class="form-control" id="sumaTotal" name="sumaTotal" readonly="readonly"
+                                               required/>
                                     </div>
                                 </div>
                             </div>
+                             <div class="row">
+                                 <div class="col-12 justify-content-center">
+                                     <h3>¿Envío?</h3>
+                                     <div class="form-check form-check-inline">
+                                         <label class="form-check-label" for="inlineRadio1"> <h4>Sí</h4></label>
+                                         <input class="form-check-input" type="radio" name="radioButton" id="inlineRadio1" value="si"
+                                                checked="checked" style="margin-left: 50%" onclick="verificaCheckbox()">
+                                     </div>
+                                     <div class="form-check form-check-inline" style="margin-left: 40%">
+                                         <label class="form-check-label" for="inlineRadio2"><h4>No</h4></label>
+                                         <input class="form-check-input" type="radio" name="radioButton" id="inlineRadio2" value="no"
+                                                style="margin-left: 50%" onclick="verificaCheckbox()">
+                                     </div>
+                                     <input type="text" class="form-control" id="direccion" name="direccion"/>
+                                 </div>
+                             </div>
 
                             <script>
                                 function multiplicaCantidad (nombreProducto, precioPKilo) {
                                     var cantidad = document.getElementById(nombreProducto + 'Cantidad').value;
                                     document.getElementById(nombreProducto + 'Total').value = Math.round(precioPKilo * cantidad);
-                                    document.getElementById('total').value =
+                                    document.getElementById('sumaTotal').value =
                                         +document.getElementById('ArrozTotal').value +
                                         +document.getElementById('FrijolTotal').value +
-                                        +document.getElementById('MaízTotal').value;
+                                        +document.getElementById('MaizTotal').value;
                                 }
 
                                 function limpiar() {
                                     document.getElementById('ArrozTotal').value = '';
                                     document.getElementById('FrijolTotal').value = '';
-                                    document.getElementById('MaízTotal').value = '';
+                                    document.getElementById('MaizTotal').value = '';
                                     document.getElementById('ArrozCantidad').value = '';
                                     document.getElementById('FrijolCantidad').value = '';
-                                    document.getElementById('MaízCantidad').value = '';
-                                    document.getElementById('total').value = '';
+                                    document.getElementById('MaizCantidad').value = '';
+                                    document.getElementById('sumaTotal').value = '';
+                                    document.getElementById('direccion').value = '';
+                                }
+
+                                function verificaCheckbox() {
+                                    if (document.getElementsByName("radioButton")[0].checked) {
+                                        document.getElementById('direccion').disabled = false;
+                                    } else {
+                                        document.getElementById('direccion').disabled = true;
+                                    }
                                 }
                             </script>
-                             <div class="d-flex justify-content-between">
+                             <div class="d-flex justify-content-between" style="margin-top: 5%;">
                                  <button type="submit" class="btn btn-primary">
                                      <i class="fas fa-paper-plane"></i> Enviar
                                  </button>

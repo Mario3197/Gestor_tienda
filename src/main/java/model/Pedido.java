@@ -6,6 +6,7 @@ public class Pedido {
     private int id;
     private int idUsuario;
     private double total;
+    private String direccion;
     private Timestamp fecha;
 
     public Pedido() {}
@@ -21,11 +22,18 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-    public Pedido(int idUsuario,double total, Timestamp fecha){
+    public Pedido(int idUsuario,double total, String direccion, Timestamp fecha){
         this.idUsuario = idUsuario;
         this.total = total;
         this.fecha = fecha;
     }
+
+    public Pedido(int idUsuario,double total, String direccion){
+        this.idUsuario = idUsuario;
+        this.total = total;
+        this.direccion = direccion;
+    }
+
 
     public int getId() { return id; }
 
@@ -38,6 +46,10 @@ public class Pedido {
     public Timestamp getFecha() { return fecha; }
 
     public void setFecha(Timestamp fecha) { this.fecha = fecha; }
+
+    public String getDireccion() { return direccion; }
+
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
     public int getIdUsuario() { return idUsuario; }
 

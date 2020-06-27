@@ -10,7 +10,7 @@ public class PedidosRepository {
     private static final String SQL_SELECT = "SELECT * from pedidos";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM pedidos where id = ?";
     private static final String SQL_SUMA_PEDIDOS = "SELECT sum(total) as sumaTotal FROM pedidos where idUsuario = ?";
-    private static final String SQL_INSERT = "INSERT INTO pedidos (idUsuario,total) VALUES (?,?)";
+    private static final String SQL_INSERT = "INSERT INTO pedidos (idUsuario,total,direccion) VALUES (?,?,?)";
     private static final String SQL_UPDATE = "UPDATE pedidos SET total =? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM pedidos WHERE id = ?";
 
@@ -83,7 +83,7 @@ public class PedidosRepository {
 
         try {
             conn = Conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_SELECT_BY_ID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = conn.prepareStatement(SQL_SUMA_PEDIDOS, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setInt(1, idUsuario);
             rs = stmt.executeQuery();
 
@@ -104,15 +104,18 @@ public class PedidosRepository {
     public int create(Pedido pedido) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int rows = 0;
+        int id = 0;
 
         try {
             conn = Conexion.getConnection();
-            stmt = conn.prepareStatement(SQL_INSERT);
+            stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, pedido.getIdUsuario());
             stmt.setDouble(2, pedido.getTotal());
-
-            rows = stmt.executeUpdate();
+            stmt.setString(3, pedido.getDireccion());
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -120,7 +123,7 @@ public class PedidosRepository {
             Conexion.close(stmt);
             Conexion.close(conn);
         }
-        return rows;
+        return id;
     }
 
     public int update(Pedido pedido) {

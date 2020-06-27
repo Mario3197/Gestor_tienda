@@ -1,5 +1,6 @@
 import model.Usuario;
 import repository.PedidosRepository;
+import repository.UsuarioRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +17,12 @@ public class ClienteController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        System.out.println("Holi");
         if (accion != null) {
             switch (accion) {
-                /*case "put":
-                    jspActualizar(request, response);
+                case "actualizar-usuario":
+                    updateUser(request, response);
                     break;
-                case "delete":
+                /*case "delete":
                     deleteCliente(request, response);
                     break;*/
                 default:
@@ -35,30 +35,23 @@ public class ClienteController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        int id = Integer.parseInt(request.getAttribute("id").toString());
-        int idTipoUsuario = Integer.parseInt(request.getAttribute("id").toString());
-        String nombre = request.getAttribute("nombre").toString();
-        String correo = request.getAttribute("correo").toString();
-        String usuario = request.getAttribute("usuario").toString();
-        String direccion = request.getAttribute("direccion").toString();
-        String telefono = request.getAttribute("telefono").toString();
-        String password = request.getAttribute("password").toString();
-
-        this.usuario = new Usuario(id,idTipoUsuario,nombre,correo,usuario,direccion,telefono,password);
+        Object accion = request.getAttribute("accion");
 
         if (accion != null) {
-            switch (accion) {
-                /*case "put":
-                    jspActualizar(request, response);
+            String nombreAccion = accion.toString();
+            switch (nombreAccion) {
+                case "producto-agregado":
+                    cargaInformacion(request, response);
                     break;
-                case "delete":
-                    deleteCliente(request, response);
-                    break;*/
+                 case "update-cliente":
+//                    deleteCliente(request, response);
+                    break;
                 default:
+                    crearObjetoUsuario(request,response);
                     cargaInformacion(request, response);
             }
         } else {
+            crearObjetoUsuario(request,response);
             cargaInformacion(request, response);
         }
     }
@@ -69,5 +62,26 @@ public class ClienteController extends HttpServlet {
         session.setAttribute("usuario", this.usuario);
         session.setAttribute("totalPedidos", totalPedidos);
         response.sendRedirect("cliente.jsp");
+    }
+
+    private void crearObjetoUsuario(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getAttribute("id").toString());
+        int idTipoUsuario = Integer.parseInt(request.getAttribute("id").toString());
+        String nombre = request.getAttribute("nombre").toString();
+        String correo = request.getAttribute("correo").toString();
+        String usuario = request.getAttribute("usuario").toString();
+        String direccion = request.getAttribute("direccion").toString();
+        String telefono = request.getAttribute("telefono").toString();
+        String password = request.getAttribute("password").toString();
+
+        this.usuario = new Usuario(id,idTipoUsuario,nombre,correo,usuario,direccion,telefono,password);
+    }
+
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int idUsuario = Integer.parseInt(request.getParameter("idCliente"));
+        Usuario cliente = new UsuarioRepository().getById(new Usuario(idUsuario));
+
+        request.setAttribute("usuario", usuario);
+        request.getRequestDispatcher("/actualizarUsuario.jsp").forward(request,response);
     }
 }

@@ -5,6 +5,7 @@ import repository.PedidosRepository;
 import repository.ProductoPedidoRepository;
 import repository.ProductoRepository;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,7 @@ public class PedidoController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String accion = request.getParameter("accion");
 
         if (accion != null) {
@@ -72,17 +73,32 @@ public class PedidoController extends HttpServlet {
         response.sendRedirect("nuevoPedido.jsp");
     }
 
-    private void guardarPedido(HttpServletRequest request, HttpServletResponse response) {
+    private void guardarPedido(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<ProductoPedido> pedidos = new ArrayList<>();
         int cantidadArroz = Integer.parseInt(request.getParameter("ArrozCantidad"));
         int cantidadFrijol = Integer.parseInt(request.getParameter("FrijolCantidad"));
-        int cantidadMaiz = Integer.parseInt(request.getParameter("MaízCantidad"));
-        double total = Double.parseDouble(request.getParameter("total"));
-        /*if (cantidadArroz > 0) {
-            pedidos.add(new ProductoPedido(1,2,));
-        }*/
-        //new ProductoPedidoRepository().create();
-        System.out.println(this.idUsuario);
+        int cantidadMaiz = Integer.parseInt(request.getParameter("MaizCantidad"));
+        double sumaTotal = Double.parseDouble(request.getParameter("sumaTotal"));
+        String direccion = request.getParameter("direccion");
+
+        if (sumaTotal > 0) {
+            int idPedido= new PedidosRepository().create(new Pedido(this.idUsuario, sumaTotal, direccion));
+            if (cantidadArroz > 0) {
+                pedidos.add(new ProductoPedido(1,idPedido,cantidadArroz));
+            }
+            if (cantidadFrijol > 0) {
+                pedidos.add(new ProductoPedido(2,idPedido,cantidadFrijol));
+            }
+            if (cantidadMaiz > 0) {
+                pedidos.add(new ProductoPedido(3,idPedido,cantidadMaiz));
+            }
+            new ProductoPedidoRepository().create(pedidos);
+//            request.setAttribute("idUsuario", this.idUsuario);
+            request.setAttribute("accion", "producto-agregado");
+            request.getRequestDispatcher("cliente").forward(request,response);
+        } else {
+            response.sendRedirect("cliente.jsp");
+        }
     }
 
 }

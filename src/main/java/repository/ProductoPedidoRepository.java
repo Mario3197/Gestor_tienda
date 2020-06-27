@@ -88,9 +88,8 @@ public class ProductoPedidoRepository {
                 stmt.setInt(1, productoPedido.getIdProducto());
                 stmt.setInt(2, productoPedido.getIdPedido());
                 stmt.setInt(3, productoPedido.getCantidad());
+                rows = stmt.executeUpdate();
             }
-
-            rows = stmt.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
