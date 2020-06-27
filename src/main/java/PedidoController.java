@@ -26,14 +26,13 @@ public class PedidoController extends HttpServlet {
 
         if (accion != null) {
             switch (accion) {
-                /*case "put":
-                    jspActualizar(request, response);
+                case "listar":
+                    cargaListaPedidos(request, response);
                     break;
-                case "delete":
-                    deleteCliente(request, response);
-                    break;*/
+                case "borrar":
+                    borrarPedido(request, response);
+                    break;
                 default:
-                    System.out.println("Holi");
                     cargaInformacion(request, response);
             }
         } else {
@@ -47,22 +46,14 @@ public class PedidoController extends HttpServlet {
 
         if (accion != null) {
             switch (accion) {
-                /*case "put":
-                    jspActualizar(request, response);
-                    break;
-                case "delete":
-                    deleteCliente(request, response);
-                    break;*/
                 case "crear":
                     guardarPedido(request, response);
                     break;
                 default:
                     System.out.println("Holi");
-                    //cargaInformacion(request, response);
             }
         } else {
             System.out.println(":v");
-            //cargaInformacion(request, response);
         }
     }
 
@@ -71,6 +62,21 @@ public class PedidoController extends HttpServlet {
         List<Producto> productos = new ProductoRepository().getAll();
         session.setAttribute("productos", productos);
         response.sendRedirect("nuevoPedido.jsp");
+    }
+
+    private void cargaListaPedidos(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        List<Pedido> pedidos = new PedidosRepository().getByIdUsuario(this.idUsuario);
+        double totalPedidos = new PedidosRepository().getSumaUsuario(this.idUsuario);
+        session.setAttribute("idUsuario", this.idUsuario);
+        session.setAttribute("totalPedidos", totalPedidos);
+        session.setAttribute("pedidos", pedidos);
+        response.sendRedirect("pedidos.jsp");
+    }
+
+    private void borrarPedido(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        new PedidosRepository().delete(new Pedido(Integer.parseInt(request.getParameter("idPedido"))));
+        cargaListaPedidos(request,response);
     }
 
     private void guardarPedido(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -93,7 +99,6 @@ public class PedidoController extends HttpServlet {
                 pedidos.add(new ProductoPedido(3,idPedido,cantidadMaiz));
             }
             new ProductoPedidoRepository().create(pedidos);
-//            request.setAttribute("idUsuario", this.idUsuario);
             request.setAttribute("accion", "producto-agregado");
             request.getRequestDispatcher("cliente").forward(request,response);
         } else {

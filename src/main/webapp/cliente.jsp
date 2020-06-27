@@ -33,7 +33,7 @@
                                         <a href="cliente?accion=actualizar-usuario" class="btn btn-primary">
                                             <i class="fas fa-pen"></i> Editar
                                         </a>
-                                        <a href="#" class="btn btn-primary">
+                                        <a href="pedido?accion=listar&idUsuario=${usuario.id}" class="btn btn-primary">
                                             <i class="fas fa-eye"></i> Ver pedidos
                                         </a>
                                     </div>

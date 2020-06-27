@@ -22,9 +22,6 @@ public class ClienteController extends HttpServlet {
                 case "actualizar-usuario":
                     updateUser(request, response);
                     break;
-                /*case "delete":
-                    deleteCliente(request, response);
-                    break;*/
                 default:
                     cargaInformacion(request, response);
             }

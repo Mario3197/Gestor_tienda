@@ -9,6 +9,7 @@ import java.util.List;
 public class PedidosRepository {
     private static final String SQL_SELECT = "SELECT * from pedidos";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM pedidos where id = ?";
+    private static final String SQL_SELECT_BY_ID_USUARIO = "SELECT * FROM pedidos where idUsuario = ?";
     private static final String SQL_SUMA_PEDIDOS = "SELECT sum(total) as sumaTotal FROM pedidos where idUsuario = ?";
     private static final String SQL_INSERT = "INSERT INTO pedidos (idUsuario,total,direccion) VALUES (?,?,?)";
     private static final String SQL_UPDATE = "UPDATE pedidos SET total =? WHERE id = ?";
@@ -73,6 +74,38 @@ public class PedidosRepository {
             Conexion.close(conn);
         }
         return pedido;
+    }
+
+    public List<Pedido> getByIdUsuario(int idUsuario) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Pedido pedido = null;
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try {
+            conn = Conexion.getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_BY_ID_USUARIO, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt.setInt(1, idUsuario);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                double total = rs.getDouble("total");
+                Timestamp fecha = rs.getTimestamp("fecha");
+
+                pedido = new Pedido(id,idUsuario,total,fecha);
+                pedidos.add(pedido);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            Conexion.close(rs);
+            Conexion.close(stmt);
+            Conexion.close(conn);
+        }
+        return pedidos;
     }
 
     public double getSumaUsuario(int idUsuario) {
