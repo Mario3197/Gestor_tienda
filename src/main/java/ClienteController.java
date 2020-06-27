@@ -51,7 +51,22 @@ public class ClienteController extends HttpServlet {
                     cargaInformacion(request, response);
             }
         } else {
-            crearObjetoUsuario(request,response);
+            String accionParametro = request.getParameter("accion");
+            if (accionParametro != null && accionParametro.equals("actualizar")) {
+                String nombre = request.getParameter("name");
+                String correo = request.getParameter("correo");
+                String usuario = request.getParameter("usuario");
+                String direccion = request.getParameter("direccion");
+                String telefono = request.getParameter("telefono");
+                String password = request.getParameter("pass");
+                Usuario user = new Usuario(this.usuario.getId(), this.usuario.getIdTipoUsuario(), nombre,
+                        correo, usuario,direccion,telefono,password);
+
+                new UsuarioRepository().update(user);
+                this.usuario = user;
+            }else {
+                crearObjetoUsuario(request,response);
+            }
             cargaInformacion(request, response);
         }
     }
@@ -78,9 +93,6 @@ public class ClienteController extends HttpServlet {
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int idUsuario = Integer.parseInt(request.getParameter("idCliente"));
-        Usuario cliente = new UsuarioRepository().getById(new Usuario(idUsuario));
-
         request.setAttribute("usuario", usuario);
         request.getRequestDispatcher("/actualizarUsuario.jsp").forward(request,response);
     }

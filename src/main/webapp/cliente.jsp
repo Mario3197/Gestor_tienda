@@ -30,7 +30,7 @@
                                 <div class="col-6">
                                     <h2 style="text-align: right;">Número de usuario: ${usuario.id}</h2>
                                     <div class ="d-flex justify-content-between" style="margin-top: 10%;">
-                                        <a href="cliente?accion=actualizar-usuario&idUsuario=${usuario.id}" class="btn btn-primary">
+                                        <a href="cliente?accion=actualizar-usuario" class="btn btn-primary">
                                             <i class="fas fa-pen"></i> Editar
                                         </a>
                                         <a href="#" class="btn btn-primary">
